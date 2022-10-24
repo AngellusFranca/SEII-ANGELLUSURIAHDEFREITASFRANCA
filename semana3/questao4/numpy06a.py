@@ -2,19 +2,24 @@ import numpy as np
 
 from timeit import default_timer as timer
 
+
 a = np.random.randn(1000)
+
 b = np.random.randn(1000)
 
 A = list(a)
 B = list(b)
 
+
 T = 1000
+
 
 def dot1():
   dot = 0
   for i in range(len(A)):
     dot += A[i] * B[i]
   return dot
+
 
 def dot2():
   return np.dot(a,b)
@@ -30,6 +35,7 @@ for t in range(T):
   dot2()
 end = timer()
 t2 = end - start
+
 
 print('Time with lists:', t1)
 print('Time with array:', t2)
