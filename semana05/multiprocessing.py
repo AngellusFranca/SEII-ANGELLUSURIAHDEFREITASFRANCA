@@ -85,7 +85,7 @@ start = time.perf_counter()
 
 
 def do_something(seconds):
-    print(f'Sleepig {seconds} second(s)...')
+    print(f'Sleeping {seconds} second(s)...')
     time.sleep(seconds)
     return f'Done Sleeping...{seconds}'
 
