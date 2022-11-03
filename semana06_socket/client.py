@@ -1,30 +1,43 @@
 import socket
 
 HEADER = 64
-PORT = 5050
-FORMAT = 'utf-8'
+PORT = 5050 #porta
+FORMAT = 'utf-8' #formato para decodificação da mensagem
 DISCONNECT_MESSAGE = "!DISCONNECT"
-SERVER = "192.168.1.26"
-ADDR = (SERVER, PORT)
+SERVER = "192.168.1.26" #IP 
+ADDR = (SERVER, PORT) #endereço 
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(ADDR)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #classe e tipo de entrada e saída
+client.connect(ADDR) #conexão
 
-def send(msg):
-    message = msg.encode(FORMAT)
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length += b' ' * (HEADER - len(send_length))
-    client.send(send_length)
-    client.send(message)
-    print(client.recv(2048).decode(FORMAT))
 
-send("Hello World!")
-input()
-send("Hello Everyone!")
-input()
-send("Hello Tim!")
+def handle_mensagens(): #gerenciar as mensagens do servidor
+    while(True):
+        msg = client.recv(1024).decode()
+        mensagem_splitada = msg.split("=")
+        print(mensagem_splitada[1] + ": " + mensagem_splitada[2])
 
-send(DISCONNECT_MESSAGE)
+def enviar(mensagem):
+    client.send(mensagem.encode(FORMATO))
+
+def enviar_mensagem():
+    mensagem = input()  #envia a mensagem
+    enviar("msg=" + mensagem) # chama a função
+
+def enviar_nome():
+    nome = input('Digite seu nome: ') #envia o nome
+    enviar("nome=" + nome)  # chama a função
+
+def iniciar_envio():
+    enviar_nome()       # chama a função
+    enviar_mensagem()   # chama a função
+
+def iniciar():
+    thread1 = threading.Thread(target=handle_mensagens)
+    thread2 = threading.Thread(target=iniciar_envio)
+    thread1.start() #inicia a thread
+    thread2.start() #inicia a thread
+
+iniciar()
 
 
